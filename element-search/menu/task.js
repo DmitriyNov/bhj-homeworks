@@ -1,10 +1,16 @@
-debugger
-Array.from(document.querySelectorAll('.menu__link')).forEach((item) => {
-    item.addEventListener('click', function () {
-        //Что-то ничего не работает у меня, как я понимаю, не определяется контекст, хотя вроде должен. Пробовал также через event.currentTarget, не работает
-        if (this.querySelector('.menu__item') !== null) {
-            this.querySelector('.menu__item').classList.add('modal_active');
-            return false;
+function menuOpening(event) {
+    const menuItem = this.closest('.menu__item');
+    const menuSub = menuItem.querySelector('.menu_sub');
+    if (menuSub !== null) {
+        //Попробовал реализвать задание повышенной сложности "Одновременно не должно быть открыто более одного вложенного меню", у меня почему-то не всегда работает preventDefault, иногда перезагружается страница
+        if (document.querySelector('.menu_active') !== null) {
+            document.querySelector('.menu_active').remove('menu_active');
         }
-    })
+        menuSub.classList.toggle('menu_active');
+        event.preventDefault();
+    }
+}
+
+Array.from(document.querySelectorAll('.menu__link')).forEach((item) => {
+    item.addEventListener('click', menuOpening)
 })
