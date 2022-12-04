@@ -1,37 +1,37 @@
 const arrowPrev = document.querySelector('.slider__arrow_prev');
 const arrowNext = document.querySelector('.slider__arrow_next');
-const items = document.querySelectorAll('.slider__item');
-itemsArr = Array.from(items);
+const items = Array.from(document.querySelectorAll('.slider__item'));
+const dots = Array.from(document.querySelectorAll('.slider__dot'));
 
-//При отправке на доработку второго задания постараюсь сделать здесь задание с повышенным уровнем сложности
-//"В решении старайтесь делать разделение кода. Регистрация обработчиков отдельно, управление слайдером отдельно." - не совсем понял, что разделить нужно, запсать циклы в отдельные функции?
+function nextSlide() {
+    let index = items.findIndex(element => element.className === 'slider__item slider__item_active');
+    items[index].classList.remove('slider__item_active');
+    dots[index].classList.remove('slider__dot_active');
+    index === items.length - 1 ? index = 0 : index++;
+    items[index].classList.add('slider__item_active');
+    dots[index].classList.add('slider__dot_active');
+}
 
-arrowPrev.addEventListener('click', () => {
-    for (let i = 0; i < itemsArr.length; i++) {
-        if (itemsArr[i].className === 'slider__item slider__item_active') {
-            itemsArr[i].classList.remove('slider__item_active');
-            if (i === 0) {
-                itemsArr[itemsArr.length - 1].classList.add('slider__item_active');
-                break;
-            } else {
-                itemsArr[i - 1].classList.add('slider__item_active');
-                break;
-            }
-        }
-    }
-})
+function prewSlide() {
+    let index = items.findIndex(element => element.className === 'slider__item slider__item_active');
+    items[index].classList.remove('slider__item_active');
+    dots[index].classList.remove('slider__dot_active');
+    index === 0 ? index = items.length - 1 : index--;
+    items[index].classList.add('slider__item_active');
+    dots[index].classList.add('slider__dot_active');
+}
 
-arrowNext.addEventListener('click', () => {
-    for (let i = 0; i < itemsArr.length; i++) {
-        if (itemsArr[i].className === 'slider__item slider__item_active') {
-            itemsArr[i].classList.remove('slider__item_active');
-            if (i === itemsArr.length - 1) {
-                itemsArr[0].classList.add('slider__item_active');
-                break;
-            } else {
-                itemsArr[i + 1].classList.add('slider__item_active');
-                break;
-            }
-        }
-    }
+function dotSwitch(event) {
+    let index = dots.findIndex(element => element.className === 'slider__dot slider__dot_active');
+    items[index].classList.remove('slider__item_active');
+    dots[index].classList.remove('slider__dot_active');
+    index = dots.findIndex(element => element === event.target);
+    items[index].classList.add('slider__item_active');
+    dots[index].classList.add('slider__dot_active');
+}
+
+arrowPrev.addEventListener('click', prewSlide);
+arrowNext.addEventListener('click', nextSlide);
+dots.forEach((element) => {
+    element.addEventListener('click', dotSwitch);
 })
