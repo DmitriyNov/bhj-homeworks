@@ -6,9 +6,9 @@ function menuOpening(event) {
         if (activeMenu !== null && activeMenu != menuSub) {
             activeMenu.classList.toggle('menu_active');
         }
-        menuSub.classList.toggle('menu_active');  
+        menuSub.classList.toggle('menu_active');
+        event.preventDefault(); 
     }
-    event.preventDefault();
 }
 
 Array.from(document.querySelectorAll('.menu__link')).forEach((item) => {
