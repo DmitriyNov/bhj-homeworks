@@ -15,6 +15,7 @@ const chatButton = document.querySelector('.chat-widget__side');
 const messages = document.getElementById('chat-widget__messages');
 const chatInput = document.getElementById('chat-widget__input');
 const chatContainer = document.querySelector('.chat-widget__messages-container');
+let intervalId = 0;
 
 function sendMessage(time, message, id = '') {
     messages.innerHTML += 
@@ -32,32 +33,33 @@ function autoScroll() {
     chatContainer.scrollTo(0, chatHeigt);
 }
 
-function inaction() {
-    window.addEventListener('keydown', () => {
-        clearInterval(intervalId)
-        intervalId = setInterval(inaction, 30000);
+function inaction(id) {
+    //Вот по поводу этой функции, в задании точно не указано, как нужно отправлять сообщения спустя тридцать секунд без активности. Я сделал, чтобы интервал сбрасывался не по отправке сообщения, а по любому вводу в инпут
+    chatInput.addEventListener('keydown', () => {
+        clearInterval(intervalId);
+        intervalId = setInterval(inaction, 3000);
     })
     let time = `${new Date().getHours() < 10 ? '0' + new Date().getHours() : new Date().getHours()}:${new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()}`;
     sendMessage(time, responseArr[Math.floor(Math.random() * 10)]);
+    clearInterval(intervalId);
 }
 
 chatButton.addEventListener('click', () => {
     chat.classList.add('chat-widget_active');
 })
 
-//Не понимаю, как реализовать выполнение кейдауна только когда инпут в фокусе, пробовал код ниже писать внутри обработчика событий на фокус инпута, но это не работает
-window.addEventListener('keydown', (event) => {
+//Почему-то я не догадался, что кейдаун можно вешать на отдельные элементы, думал, так не будет работать
+chatInput.addEventListener('keydown', (event) => {
     if (chatInput.value !== '' && event.code === 'Enter') {
         let time = `${new Date().getHours() < 10 ? '0' + new Date().getHours() : new Date().getHours()}:${new Date().getMinutes() < 10 ? '0' + new Date().getMinutes() : new Date().getMinutes()}`;
         sendMessage(time, chatInput.value, 'message_client');
         chatInput.value = '';
         setTimeout(() => {
             sendMessage(time, responseArr[Math.floor(Math.random() * 10)]);
-        }, 2000)
+        }, 1000)
+        clearInterval(intervalId);
+        intervalId = setInterval(inaction, 3000);
     }
 })
-
-//опять же эта функция должна выполняться только когда инпут в фокусе, подскажите, как это сделать, а остальное у меня вроде работает правильно
-let intervalId = setInterval(inaction, 30000);
 
 
