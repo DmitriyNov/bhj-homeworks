@@ -12,9 +12,7 @@ function changingQuantity(event) {
 }
 
 function addToCart(id, src, qty, event) {
-    let cartsItem = Array.from(document.querySelectorAll('.cart__product')).find((element) => {
-        return element.dataset.id === id;
-    })
+    let cartsItem = Array.from(document.querySelectorAll('.cart__product')).find((element) => element.dataset.id === id);
     if (cartsItem) {
         cartsItem.querySelector('.cart__product-count').textContent = +cartsItem.querySelector('.cart__product-count').innerText + +qty;
     } else {
