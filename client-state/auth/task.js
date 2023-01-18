@@ -17,6 +17,7 @@ signinButton.addEventListener('click', (event) => {
             signin.classList.remove('signin_active');
             welcome.classList.add('welcome_active');
             userId.textContent = response.user_id;
+            signinForm.reset();
         } else {
             alert('Неверный логин или пароль');
         }
